@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <!-- Microsoft Teams JavaScript API (via CDN) -->
+    <script src="https://unpkg.com/@microsoft/teams-js@1.4.1/dist/MicrosoftTeams.min.js" integrity="sha384-wHgBQlRj8iDw76cpan9ViEoOBiIJid4ACaE6vA2gUJPtn15GJnMmUGS+fLxKBWeI" crossorigin="anonymous"></script>
+
+</head>
+<body>
+    This is the configure page for teams
+
+    <input type="button" name="SaveMyConfig" value="Save" onclick="onClick()" />
+    <label id="username">Username</label>
+    <label id="tenant">tenant</label>
+    <label id="groupId">groupId</label>
+
+    <script type="text/javascript">
+
+        microsoftTeams.initialize();
+        microsoftTeams.settings.registerOnSaveHandler(function (saveEvent) {
+            microsoftTeams.settings.setSettings({
+                entityId: "MyConfigTab",
+                contentUrl: "https://localhost:44314/ConfigurableTabDisplay.html",
+                suggestedDisplayName: "My own config tab",
+                websiteUrl: "https://localhost:44314/ConfigurableTabDisplay.html",
+            });
+
+            saveEvent.notifySuccess();
+        });
+
+        function onClick() {
+            microsoftTeams.settings.setValidityState(true);
+        }
+
+        (function () {
+
+            microsoftTeams.getContext(function(context) {
+                var userNameLabel = document.getElementById('username');
+                var tenantIdLabel = document.getElementById('tenant');
+                var groupIdLabel = document.getElementById('groupId');
+                userNameLabel.innerHTML = context.userPrincipalName;
+                tenantIdLabel.innerHTML = context.tid;
+                groupIdLabel.innerHTML = context.groupId;
+
+            });
+        })();
+
+    </script>
+</body>
+</html>
